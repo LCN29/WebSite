@@ -1,0 +1,65 @@
+
+/* css reset */
+body,p,h1,h2,h3,h4,h5,ul,input,select{
+  padding: 0;
+  margin: 0;
+}
+
+li{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+img{
+  vertical-align: top;
+  border: none;
+}
+
+/* clear float */
+.clear{
+  zoom: 1;
+}
+.clear:after{
+  content: '';
+  display: block;
+  clear: both;
+}
+
+// commone style
+
+//font
+$font-family: "Segoe UI",Segoe,Tahoma,Arial,Verdana,sans-serif;
+// 正常文字颜色
+$text_color: #fff;
+// active状态下的颜色
+$text_color_active: #ccc;
+//hover状态下的颜色
+$text_color_hover: rgba(225,225,225,.9);
+//歌词字体
+$text_Light_color: rgba(225,225,225,.6);
+
+//border
+$border_bottom_color: rgba(255,255,255,0.7);
+$border_bottom_color_deep: rgba(255,255,255,0.3);
+$border_bottom_color_opacity: rgba(255,255,255,0.1);
+
+//音乐进度条
+$progress_color: rgba(255,255,255,0.1);
+$buffering_color: rgba(255,255,255,0.2);
+$real_color: red;
+
+
+
+// mixin
+
+//定位 占满父级
+@mixin fill-father($top: 0, $left: 0, $bottom: 0,$right: 0) {
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}
