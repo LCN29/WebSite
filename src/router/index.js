@@ -33,6 +33,12 @@ export default new Router({
                     redirect: store.getters.getMusicRouter, //重定向到上一次的路由地址
                 },
                 {
+                    path: '/music/playlist',
+                    components: {
+                        ListInfo: PlayList,
+                    }
+                },
+                {
                     path: '/music/playlist/:id',
                     components: {
                         ListInfo: PlayList,

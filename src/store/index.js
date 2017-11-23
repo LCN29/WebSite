@@ -12,7 +12,7 @@ const debug = process.env.NODE_ENV !== 'production';
 const state = {
 
     //一开始进入音乐的路由
-    musicRouter: '/music/playlist/124995419',
+    musicRouter: '/music/playlist',
     //显示加载进度圈
     showLoading: false,
     //音乐播放标签<audio>
@@ -37,7 +37,7 @@ const mutations= {
     },
     //设置网络状态，是否显示加载...
     [types.SETNETSTATE](state,status){
-        state.showloading= status;
+        state.showLoading= status;
     },
     //3，设置音乐播放标签<audio>
     [types.SETAUDIOELE](state,audio){

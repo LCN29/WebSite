@@ -23,27 +23,12 @@ export const SETCURRENTMUSICTIME= "SETCURRENTMUSICTIME";
 // 8, 设置音乐播放状态
 export const SETMUSICISPLAY = "SETMUSICISPLAY";
 
+// 9,设置musiclist（MusicModule）用于音乐列表的数据
+export const SETMUSICLIST= "MUSICLIST";
 
-
-
-
-
-
-
-
-
-//网络请求中 当页面向服务器请求资源时，用于显示加载页面 用于loader的出现
-export const NETWORKREQUEST= "NETWORKREQUEST";
-
-//网络请求结束 当页面向服务器请求资源结束，用于显示清除页面 用于loader的消失
-export const NETWORKREQUESTEND= "NETWORKREQUESTEND";
-
-//当前音乐的持续时间
+// 10,当前音乐的持续时间
 export const SETCURRENTMUSICDURATION= "SETCURRENTMUSICDURATION";
 
-
-//设置musiclist（MusicModule）用于音乐列表的数据
-export const SETMUSICLIST= "MUSICLIST";
 
 
 

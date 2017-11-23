@@ -23,13 +23,13 @@ const state= {
     //当前歌曲的歌词位置
     musicPosition: 0,
 
-    //当前音乐已经播放的时间 12323232格式为这个  需要将其改为 12:34这个
+    //当前音乐已经播放的时间 12323232
     currentMusicTime: 0,
 
     //音乐播放状态
     musicIsPlay: true,
 
-    // 当前音乐的持续时间  23: 00
+    // 当前音乐的持续时间  123456
     currentMusicDuration: 0,
 
 };
@@ -40,12 +40,9 @@ const getters= {
     getMusicPosition: state=> state.musicPosition,
     getCurrentMusicTime: state=> state.currentMusicTime,
     getMusicIsPlay: state=> state.musicIsPlay,
-
     getMusicList: state=> state.musicList.content,
-
-
-
     getCurrentMusicDuration: state=> state.currentMusicDuration,
+
 };
 
 const mutations= {
@@ -65,8 +62,6 @@ const mutations= {
     [types.SETMUSICISPLAY](state,status){
         state.musicIsPlay= status;
     },
-
-
 
     [types.SETMUSICLIST](state,content){
         state.musicList= { ...state.musicList, content };
@@ -95,20 +90,21 @@ const actions= {
         commit(types.SETMUSICISPLAY,status);
     },
 
-
-    initMusicSheet({ commit },id){
-        commit(types.NETWORKREQUEST);
-        MusicApi.getMusicSheet(id)
+    setMusicList({commit},id){
+        commit(types.SETNETSTATE,true);
+        MusicApi.getMusicList(id)
             .then(
-                response=> {
-                    commit(types.NETWORKREQUESTEND);
-                    commit(types.SETMUSICLIST,response.data.playlist.tracks);
-                },
                 res=> {
-                    commit(types.NETWORKREQUESTEND);
+                    commit(types.SETNETSTATE,false);
+                    commit(types.SETMUSICLIST,res.data.playlist.tracks);
+                },
+                err=> {
+                    commit(types.SETNETSTATE,false);
+                    console.log("错误了");
                 }
-            )
+            );
     },
+
 
     setCurrentMusicDuration({commit},time){
         commit(types.SETCURRENTMUSICDURATION,time);

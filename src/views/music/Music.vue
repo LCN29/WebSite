@@ -20,7 +20,6 @@
                         <router-view class="list_content" name="ListInfo"></router-view>
                     </transition>
                 </div>
-
                 <!--全屏显示-->
                 <transition name="silde-top">
                     <router-view class="music_wrapper" name="fullscreen"></router-view>
@@ -41,9 +40,9 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="music_ctrl">
-
                 <div class="left_ctrl">
                     <div class="music_detail_ctrl">
                         <div title="上一曲 ←" @click.stop="playPrev"></div>
@@ -59,7 +58,7 @@
                                 {{ getCurrentMusic.singer}}
                             </span>
                             <span class="music_c_time">
-                                {{  getCurrentMusicTime }}
+                                {{  getMusicTimeFormat }}
                                 /
                                 {{ getCurrentMusic.duration }}
                             </span>
@@ -67,7 +66,7 @@
                         <div class="music_progress_bar" @click="clickProgress" id="music_progress">
                             <div class="duration" id="music_progressD">
                                 <div class="buffering" :style="{ width:`${bufferingP }%`}"></div>
-                                <div class="real" :style="{width: getMusicPro}"></div>
+                                <div class="real" :style="{width: getMusicPro }"></div>
                             </div>
                             <div class="range" :style="{left: `${getMusicPro}`}"
                                  @mousedown="dragMouseDown"
@@ -75,20 +74,18 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="right_ctrl" >
                 </div>
-
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
+
     import { mapActions,mapGetters } from 'vuex';
+    import api from './musicOperationApi';
 
     export default {
         name: 'music',
@@ -104,37 +101,42 @@
                 'getMusicPosition',
                 'getCurrentMusicTime',
                 'getMusicIsPlay',
+                'getCurrentMusicDuration',
             ]),
+            getMusicPro(){
+                const mp = this.getCurrentMusicTime/this.getCurrentMusicDuration*100;
+                return (mp).toFixed(4)+"%";
+            },
+            getMusicTimeFormat(){
+                return api.getMusicFormat(this.getCurrentMusicTime*1000);
+            },
         },
         methods: {
             ...mapActions([
                 'setMusicRouter',
                 'setLrcElem',
             ]),
-            getMusicFormat(time){
-                return time+":00";
-            },
-            clickProgress(){
+            clickProgress(ev){
                 //点击了进度条
+                api.clickProgress(ev,this);
             },
             playPrev(){
                 //播放上一曲
+                api.playNextPrev(this, false);
             },
             playPause(){
                 //播放/暂停
+                api.playPause();
             },
             playNext(){
                 //播放下一曲
-            },
-            getMusicPro(){
-                //当前已播放占了总时间的多少
-                return 35+"%";
+                api.playNextPrev(this, true);
             },
             dragMouseDown(){
                 //拖动进度条事件
             },
             initAudioEvent(){
-
+                api.initAudioEvent(this);
             },
             keypressEvent(){
 
@@ -367,7 +369,7 @@
                                 border-radius: 1px;
                                 position: relative;
                                 .buffering{
-                                    width: 20%;
+                                    width: 0%;
                                     height: 2px;
                                     background: $buffering_color;
                                     border-radius: 1px;
