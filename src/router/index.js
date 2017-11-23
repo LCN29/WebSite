@@ -7,7 +7,7 @@ import Home from '@/views/home/Home';
 const Music= r=> require.ensure([],()=> r(require('@/views/music/Music')) ,'music');
 const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings')) ,'settings');
 const PlayList= r=> require.ensure([],()=> r(require('@/views/music/playList/PlayList')) ,'playlist');
-const CollectList= r=> require.ensure([],()=> r(require('@/views/music/collectionList/CollectionList')) ,'collectionlist');
+const CollectionList= r=> require.ensure([],()=> r(require('@/views/music/collectionList/CollectionList')) ,'collectionlist');
 const TopList= r=> require.ensure([],()=> r(require('@/views/music/topList/TopList')) ,'toplist');
 const SearchView= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchView')) ,'searchView');
 
@@ -33,15 +33,27 @@ export default new Router({
                     redirect: store.getters.getMusicRouter, //重定向到上一次的路由地址
                 },
                 {
+                    path: '/music/playlist/:id',
+                    components: {
+                        ListInfo: PlayList,
+                    }
+                },
+                {
                     path: '/music/playlist',
                     components: {
                         ListInfo: PlayList,
                     }
                 },
                 {
-                    path: '/music/playlist/:id',
+                    path: '/music/collectionlist',
                     components: {
-                        ListInfo: PlayList,
+                        ListInfo: CollectionList,
+                    }
+                },
+                {
+                    path: '/music/toplist',
+                    components: {
+                        ListInfo: TopList,
                     }
                 }
             ],

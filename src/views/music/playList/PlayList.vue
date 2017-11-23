@@ -55,10 +55,23 @@
         methods: {
             ...mapActions([
                 'setMusicList',
+                'addCollectedMusic'
             ]),
             collectMusic(index){
                 //加入收藏夹
-                console.log(index+"加入收藏夹");
+                const item= this.getMusicList[index];
+                let music={
+                    id: item.id,
+                    name: item.name,
+                    picurl: item.al.picUrl,
+                    singer: item.ar[0].name,
+                    album: item.al.name,
+                    albumId: item.al.id,
+                    musicindex: index,
+                    duration: this.getMusicFormat(item.dt),
+                };
+
+                this.addCollectedMusic(music);
             },
             searchMusic(index){
                 //查询音乐
@@ -73,7 +86,6 @@
             },
             clickPlayItem(item,index){
                 //点击播放某一项
-                console.log("点击播放某一项");
                 let data={
                     id: item.id,
                     name: item.name,

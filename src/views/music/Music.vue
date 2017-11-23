@@ -1,7 +1,7 @@
 <template>
     <div class="music">
         <!--  music_bg 图片朦胧 mask_bg加上一层遮罩，mask_linear_bg最下层一层黑色，挡住Fixbg -->
-        <div class="music_bg" :style="{background:'url('+getCurrentMusic.picurl+') no-repeat'}">
+        <div class="music_bg" :style="{background:'url('+getCurrentMusic.picurl+')',backgrouondSize:'cover',backgroundPosition:'center center'}">
             <div class="mask_bg" ></div>
         </div>
         <div class="mask_linear_bg"></div>
@@ -11,8 +11,8 @@
                 <div class="left_list">
                     <div class="music_nav">
                         <router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">正在播放</router-link>
-                        <router-link tag="span" to="/music/playlist1" class="todo_btn playing_btn">我的收藏</router-link>
-                        <router-link tag="span" to="/music/playlist2" class="todo_btn playing_btn">排行榜/歌单</router-link>
+                        <router-link tag="span" to="/music/collectionlist" class="todo_btn playing_btn">我的收藏</router-link>
+                        <router-link tag="span" to="/music/toplist" class="todo_btn playing_btn">排行榜/歌单</router-link>
                         <router-link tag="span" to="/music/playlist3" class="todo_btn playing_btn">搜索音乐</router-link>
                     </div>
 
@@ -132,15 +132,30 @@
                 //播放下一曲
                 api.playNextPrev(this, true);
             },
-            dragMouseDown(){
+            dragMouseDown(ev){
                 //拖动进度条事件
+             //   api.dragMouseDown(ev,this);
+                console.log("拖动事件");
             },
             initAudioEvent(){
                 api.initAudioEvent(this);
             },
             keypressEvent(){
+                let that = this;
+                document.onkeydown=e =>{
+                    console.log(e.keyCode);
+                    if (e.keyCode == 32) {   //空格
+                        api.playPause()
+                    }
+                    if ( e.keyCode === 39) { 	// 向右箭头
+                        api.playNextPrev(that, true)
+                    }
+                    if (e.keyCode === 37) { 	//向左箭头
+                        api.playNextPrev(that, false)
+                    }
+                };
+            },
 
-            }
         },
         watch: {
             '$route' (to, from) {
@@ -165,8 +180,6 @@
         .music_bg{
             position: fixed;
             @include fill-father;
-            background-position: center center;
-            background-size: cover;
             z-index: -2;
             backdrop-filter: blur(10px);
             filter: blur(16px);

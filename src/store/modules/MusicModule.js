@@ -32,6 +32,8 @@ const state= {
     // 当前音乐的持续时间  123456
     currentMusicDuration: 0,
 
+    // 收集歌曲的内容
+    musicCollectList: localStorage.getItem('musicCollectList') ? JSON.parse(localStorage.getItem('musicCollectList')): [],
 };
 
 const getters= {
@@ -42,7 +44,7 @@ const getters= {
     getMusicIsPlay: state=> state.musicIsPlay,
     getMusicList: state=> state.musicList.content,
     getCurrentMusicDuration: state=> state.currentMusicDuration,
-
+    getMusicCollectList: state=> state.musicCollectList,
 };
 
 const mutations= {
@@ -69,7 +71,36 @@ const mutations= {
 
     [types.SETCURRENTMUSICDURATION](state,time){
         state.currentMusicDuration= time;
-    }
+    },
+
+    [types.ADDCOLLECTEDMUSIC](state,music){
+        let list= state.musicCollectList;
+        list.forEach((item)=>{
+            if(music.id=== item.id){
+                //歌曲已经收藏过了
+                return;
+            }
+        });
+        state.musicCollectList.unshift(music);
+        localStorage.setItem('musicCollectList', JSON.stringify(list));
+        console.log(state.musicCollectList);
+    },
+
+    [types.DELETECOLLECTEDMUSIC](state,id){
+
+        let list= state.musicCollectList;
+        list.forEach((item,i)=>{
+            if(id=== item.id){
+                //找到要删除的音乐
+                console.log("找到了");
+                state.musicCollectList.splice(i, 1);
+                localStorage.setItem('musicCollectList', JSON.stringify(list));
+                return;
+            }
+        });
+
+    },
+
 };
 
 const actions= {
@@ -90,7 +121,13 @@ const actions= {
         commit(types.SETMUSICISPLAY,status);
     },
 
-    setMusicList({commit},id){
+    setMusicList({commit,rootState},id){
+
+        const musicList= rootState.MusicModule.musicList;
+        if(musicList.content !==undefined){
+            //数据已存在，直接渲染就行了
+            return;
+        }
         commit(types.SETNETSTATE,true);
         MusicApi.getMusicList(id)
             .then(
@@ -105,10 +142,18 @@ const actions= {
             );
     },
 
-
     setCurrentMusicDuration({commit},time){
         commit(types.SETCURRENTMUSICDURATION,time);
-    }
+    },
+
+    addCollectedMusic({commit,rootState},music){
+        commit(types.ADDCOLLECTEDMUSIC,music);
+    },
+
+    deleteCollectedMusic({commit},id){
+        commit(types.DELETECOLLECTEDMUSIC,id);
+    },
+
 };
 
 export default {

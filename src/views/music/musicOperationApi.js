@@ -9,6 +9,10 @@ const musicApi = {
 
     lastLyric: 0,
     lyric: {},    // 解析的歌詞
+    //最大进度
+    maxProgressWidth: 0,
+    //当前拖到的位置
+    dragProgressTo: 0,
 
     // 获取音乐时长的 00:11的格式
     getMusicFormat(time) {
@@ -190,8 +194,7 @@ const musicApi = {
         };
     },
 
-    // 滚动歌词到指定句
-    // 参数：当前播放时间（单位：秒）
+    // 滚动歌词到指定句 参数：当前播放时间（单位：秒）
     scrollLyric (time) {
 
         if (this.lyric === '') return false;
@@ -220,14 +223,12 @@ const musicApi = {
     },
 
     //点击了进度条的某个位置
-
     clickProgress(ev){
         const ele = store.getters.getAudioEle;
         const durationT = ele.duration;
         const e = ev || window.event;
         const l = e.offsetX;
         const w = document.getElementById('music_progressD').offsetWidth;
-        console.log(l + '------------' + w);
         ele.currentTime = Math.floor(l / w * durationT);
         this.refreshLyric(ele.currentTime);
     },
@@ -244,8 +245,57 @@ const musicApi = {
         this.scrollLyric(i);
     },
 
+    //拖动进度条
+    dragMouseDown(event,that){
+        const ele = store.getters.getAudioEle;
+        if (ele.src.indexOf('.') < 0) return;
+        let _this = this;
+        that.isDrag = true;
+        let e = event || window.event;
+        let x = e.clientX;
+        let l = e.target.offsetLeft;
+        _this.maxProgressWidth = document.getElementById('music_progressD').offsetWidth;
+        let moveProgress = document.getElementById('music_progress');
 
+       moveProgress.onmousemove = function (event) {
+            if (that.isDrag) {
+                let e = event || window.event;
+                let thisX = e.clientX;
+                _this.dragProgressTo = Math.min(_this.maxProgressWidth, Math.max(0, l + (thisX - x)));
+                _this.updateDragProgress(that,_this.maxProgressWidth, _this.dragProgressTo);
+            }
+        };
 
+       moveProgress.onmouseup = function (event) {
+            const durationT = ele.duration;
+            if (that.isDrag) {
+                that.isDrag = false;
+                const temp= Math.floor(_this.dragProgressTo / _this.maxProgressWidth * durationT);
+                store.commit(types.SETCURRENTMUSICTIME, temp);
+             //   ele.currentTime = store.getters.currentMusicTime;
+            }
+        };
+
+       moveProgress.onmouseleave = function (event) {
+            const durationT = ele.duration;
+            if (that.isDrag) {
+                that.isDrag = false;
+                const temp= Math.floor(_this.dragProgressTo / _this.maxProgressWidth * durationT);
+                store.commit(types.SETCURRENTMUSICTIME, temp);
+           //     ele.currentTime = store.getters.currentMusicTime;
+
+            }
+        };
+
+    },
+
+    //更新位置  l length  to 移动的位置
+    updateDragProgress(that,l, to){
+        const ele = store.getters.getAudioEle;
+        const durationT = ele.duration;
+        musicApi.scrollLyric(Math.floor(to / l * durationT), that);
+        store.commit(types.SETCURRENTMUSICTIME, Math.floor(to / l * durationT));
+    },
 
 
     //显示本地收藏音乐
