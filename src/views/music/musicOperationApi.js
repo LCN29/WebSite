@@ -61,8 +61,8 @@ const musicApi = {
                     musiclist= store.getters.getTopList;
                 break;
             case 'search':
-                //    length= store.getters.getTopList.length;
-               //     musiclist= store.getters.getTopList;
+                    length= store.getters.getSearchList.length;
+                    musiclist= store.getters.getSearchList;
                 break;
             default:
                 // 'music'

@@ -26,7 +26,7 @@
                 </span>
 
                 <span class="music_singer">
-					<span @click.stop="searchMusic(index)">{{item.ar[0].name}}</span>
+					<span @click.stop="searchMusic">{{item.ar[0].name}}</span>
 				</span>
 
                 <span class="music_album">
@@ -90,9 +90,9 @@
 
                 this.addCollectedMusic(music);
             },
-            searchMusic(index){
+            searchMusic(ev){
                 //查询音乐
-                console.log(index+"查询音乐");
+                this.$router.push({name: 'searchsheet', params: { w: ev.target.innerHTML }});
             },
             getAlbum(id){
                 //获取专辑
