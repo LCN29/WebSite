@@ -30,6 +30,16 @@ export default {
             do: "lyric",
             id: id,
         });
+    },
+    //获取热门歌单的分类
+    // 'http://www.daiwei.org/vue/server/music.php?inAjax=1&do=albums'
+    getHotSongSheet(){
+       return fetch.get(baseUrl,{
+           inAjax: 1,
+           do: "albums",
+       });
+
+
     }
 }
 

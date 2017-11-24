@@ -1,5 +1,5 @@
 <template>
-    <div class="play-list">
+    <div class="top-sheet">
         <div class="music_list_title">
             <span class="music_index"></span>
             <span class="music_name">歌曲</span>
@@ -8,8 +8,8 @@
             <span class="music_duration">时长</span>
         </div>
         <div class="music_list_content">
-            <div class="music_list" v-if="getMusicList"
-                 v-for="(item, index) in getMusicList"
+            <div class="music_list" v-if="getTopList"
+                 v-for="(item, index) in getTopList"
                  :key="item.id" :data-musicid="item.id" :data-pic="item.al.picUrl"
                  @click="clickPlayItem(item,index)"
             >
@@ -30,7 +30,7 @@
 				</span>
 
                 <span class="music_album">
-					<span @click.stop="getAlbum(item.al.id)">{{item.al.name}}</span>
+					<span @click.stop="getAlbum(item.albumId)">{{item.al.name}}</span>
 				</span>
 
                 <span class="music_duration">{{getMusicFormat(item.dt)}}</span>
@@ -42,26 +42,41 @@
 
 <script>
 
-    import { mapGetters,mapActions } from 'vuex';
+    // 该页面用于点击toplist后，音乐列表的显示
     import api from '../musicOperationApi';
+    import { mapActions,mapGetters } from 'vuex'
 
     export default {
-        name: 'play-list',
-        data () {
+        name: 'top-sheet',
+        data(){
             return{
-                id: this.$route.params.id || 124995419,
-                kind: 'music',
+                id: this.$route.params.id,
+                kind: "top",
             }
         },
         methods: {
             ...mapActions([
-                'setMusicList',
+                'setTopList',
                 'addCollectedMusic',
                 'setPlayingKind',
             ]),
+            getMusicFormat(time){
+                return api.getMusicFormat(time);
+            },
+            clickPlayItem(item,index){
+                //点击播放某一项
+                let data={
+                    id: item.id,
+                    name: item.name,
+                    picurl: item.al.picUrl,
+                    singer: item.ar[0].name,
+                    duration: item.duration,
+                };
+                api.clickIndex(data,this);
+            },
             collectMusic(index){
                 //加入收藏夹
-                const item= this.getMusicList[index];
+                const item= this.getTopList[index];
                 let music={
                     id: item.id,
                     name: item.name,
@@ -69,6 +84,7 @@
                     singer: item.ar[0].name,
                     album: item.al.name,
                     albumId: item.al.id,
+                    musicindex: index,
                     duration: this.getMusicFormat(item.dt),
                 };
 
@@ -82,32 +98,17 @@
                 //获取专辑
                 console.log(id+"获取专辑");
             },
-            getMusicFormat(time){
-                return api.getMusicFormat(time);
-            },
-            clickPlayItem(item,index){
-                //点击播放某一项
-                let data={
-                    id: item.id,
-                    name: item.name,
-                    picurl: item.al.picUrl,
-                    singer: item.ar[0].name,
-                    musicindex: index,
-                    duration: this.getMusicFormat(item.dt),
-                };
-                api.clickIndex(data,this);
-            }
         },
         computed: {
             ...mapGetters([
-                'getMusicList',
+                'getTopList',
                 'getCurrentMusic',
             ]),
         },
         mounted(){
             this.$nextTick(() => {
                 this.setPlayingKind(this.kind);
-                this.setMusicList(this.id);
+                this.setTopList(this.id);
             });
         }
     }
@@ -118,7 +119,7 @@
 
     @import "../../../assets/styles/base";
 
-    .play-list{
+    .top-sheet{
         padding-left: 20px;
         padding-top: 10px;
         flex-direction: column;
@@ -182,6 +183,30 @@
                 top: 0px;
                 display: none;
             }
+        }
+
+        /* 滚动条部分 */
+        ::-webkit-scrollbar {
+            width:10px;
+        }
+
+        /* 轨道 */
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        /* 手柄 */
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            background:rgba(200,200,200,0.9);
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+        /* 手柄激活态 */
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(200,200,200,0.4);
         }
     }
 

@@ -47,10 +47,15 @@
 
     export default {
         name: 'collection-list',
+        data(){
+            return{
+                kind: 'collection',
+            }
+        },
         methods: {
             ...mapActions([
-                'setMusicList',
-                'deleteCollectedMusic'
+                'deleteCollectedMusic',
+                'setPlayingKind',
             ]),
             getMusicFormat(time){
                 return api.getMusicFormat(time);
@@ -85,11 +90,11 @@
                 'getCurrentMusic',
             ]),
         },
-        watch: {
-            '$route'(to,from){
-                this.id = this.$route.params.id;
-            }
-        },
+        mounted(){
+            this.$nextTick(() => {
+                this.setPlayingKind(this.kind);
+            });
+        }
     }
 </script>
 

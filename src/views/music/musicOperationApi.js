@@ -48,9 +48,32 @@ const musicApi = {
 
     //播放上一首/下一首  false: 上一首  true: 下一首
     playNextPrev(that, isNext){
+        let length= -1;
+        let musiclist= null;
+
+        switch(store.getters.getPlayingKind){
+            case 'collection':
+                    length= store.getters.getMusicCollectList.length;
+                    musiclist= store.getters.getMusicCollectList;
+                break;
+            case 'top':
+                    length= store.getters.getTopList.length;
+                    musiclist= store.getters.getTopList;
+                break;
+            case 'search':
+                //    length= store.getters.getTopList.length;
+               //     musiclist= store.getters.getTopList;
+                break;
+            default:
+                // 'music'
+                    length= store.getters.getMusicList.length;
+                    musiclist= store.getters.getMusicList;
+                break;
+
+        }
+
         let index = store.getters.getCurrentMusic.musicindex || 0;
-        let length = store.getters.getMusicList.length ;
-        const musiclist = store.getters.getMusicList || [];
+
         if (isNext) {
             index++;
             if (index > length - 1) {
@@ -74,13 +97,14 @@ const musicApi = {
                         this.playNextPrev(that, true);
                         return;
                     }
+                    const duration = musiclist[index].dt.indexOf(":") > 0 ? musiclist[index].dt : musicApi.getMusicFormat(musiclist[index].dt);
                     const newData = {
                         id: musiclist[index].id,
                         name: musiclist[index].name,
                         url: musicApi.replaceUrl(res.data.data[0].url),
-                        singer: musiclist[index].ar[0].name,
-                        duration: musicApi.getMusicFormat(musiclist[index].dt),
-                        picurl: musiclist[index].al.picUrl,
+                        singer:  musiclist[index].singer || musiclist[index].ar[0].name,
+                        duration: duration,
+                        picurl: musiclist[index].picurl || musiclist[index].al.picUrl,
                         musicindex: index,
                     };
                     this.getMusicLrc(newData, that);
@@ -112,12 +136,9 @@ const musicApi = {
         api.getMusicLrc(data.id)
             .then(
                 res=> {
-                  /*  let parseLrc = {};*/
                     if (res.data.lrc === undefined) {
-                        /*parseLrc= {'0': '纯音乐,请欣赏'};*/
                         this.lyric = {'0': '纯音乐,请欣赏'};
                     }else{
- /*                       parseLrc = this.parseLrc(res.data.lrc.lyric);*/
                         this.lyric = this.parseLrc(res.data.lrc.lyric);
                     }
                     // 初始化最後一個lrc

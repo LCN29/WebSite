@@ -10,7 +10,7 @@
             <div class="music_body">
                 <div class="left_list">
                     <div class="music_nav">
-                        <router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">正在播放</router-link>
+                        <router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">推荐列表</router-link>
                         <router-link tag="span" to="/music/collectionlist" class="todo_btn playing_btn">我的收藏</router-link>
                         <router-link tag="span" to="/music/toplist" class="todo_btn playing_btn">排行榜/歌单</router-link>
                         <router-link tag="span" to="/music/playlist3" class="todo_btn playing_btn">搜索音乐</router-link>
@@ -143,7 +143,6 @@
             keypressEvent(){
                 let that = this;
                 document.onkeydown=e =>{
-                    console.log(e.keyCode);
                     if (e.keyCode == 32) {   //空格
                         api.playPause()
                     }

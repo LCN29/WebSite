@@ -35,9 +35,17 @@ export const ADDCOLLECTEDMUSIC= "ADDCOLLECTEDMUSIC";
 //12,删除收藏歌曲
 export const DELETECOLLECTEDMUSIC= "DELETECOLLECTEDMUSIC";
 
+//13,设置热门歌单
+export const SETHOTSONGSHEET= "SETHOTSONGSHEET";
 
+//14,设置top的歌曲
+export const SETTOPLIST= "SETTOPLIST";
 
+//15,设置当前播放的音乐类别为哪个 本地收藏/推荐列表/top榜/搜索列表
+export const SETPLAYINGKIND= "SETPLAYINGKIND";
 
+//16,设置搜索出来的歌曲列表
+export const SETSEARCHLIST= "SETSEARCHLIST";
 
 
 

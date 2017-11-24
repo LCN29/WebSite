@@ -4,9 +4,6 @@ import MusicApi from '../../api/MusicApi';
 
 const state= {
 
-    // 音乐显示列表,musicSheet等内容都是由他提供，
-    musicList: {},
-
     //当前播放的歌曲
     currentMusic: {
         id: '',
@@ -32,8 +29,24 @@ const state= {
     // 当前音乐的持续时间  123456
     currentMusicDuration: 0,
 
-    // 收集歌曲的内容
+    //当前播放的音乐为哪个表的  music默认 collection收集的 top 排行榜的 search  搜索的
+    playingKind: 'music',
+
+    // 音乐推荐列表
+    musicList: {},
+
+    // 收集歌曲列表
     musicCollectList: localStorage.getItem('musicCollectList') ? JSON.parse(localStorage.getItem('musicCollectList')): [],
+
+    //热门歌单
+    hotSongSheet: {},
+
+    //top 歌曲列表
+    topList: {},
+
+    //搜索出来的列表
+    searchList: {},
+
 };
 
 const getters= {
@@ -45,6 +58,10 @@ const getters= {
     getMusicList: state=> state.musicList.content,
     getCurrentMusicDuration: state=> state.currentMusicDuration,
     getMusicCollectList: state=> state.musicCollectList,
+    getHotSongSheet: state=> state.hotSongSheet,
+    getTopList: state=> state.topList,
+    getPlayingKind: state=> state.playingKind,
+    getSearchList: state=> state.searchList,
 };
 
 const mutations= {
@@ -81,25 +98,46 @@ const mutations= {
                 return;
             }
         });
-        state.musicCollectList.unshift(music);
+        music.musicindex= list.length;
+        state.musicCollectList.push(music);
         localStorage.setItem('musicCollectList', JSON.stringify(list));
-        console.log(state.musicCollectList);
     },
 
     [types.DELETECOLLECTEDMUSIC](state,id){
-
         let list= state.musicCollectList;
         list.forEach((item,i)=>{
             if(id=== item.id){
-                //找到要删除的音乐
-                console.log("找到了");
+                //找到要删除的音乐 删除并把最后一个的音乐索引变为i
                 state.musicCollectList.splice(i, 1);
+                state.musicCollectList[state.musicCollectList.length-1].musicindex= i;
                 localStorage.setItem('musicCollectList', JSON.stringify(list));
                 return;
             }
         });
 
     },
+
+    [types.SETHOTSONGSHEET](state,list){
+        state.hotSongSheet= list;
+    },
+
+    [types.SETPLAYINGKIND](state,kind){
+        state.playingKind= kind;
+    },
+
+    [types.SETTOPLIST](state,content){
+        if(state.topList.length !==0){
+            state.topList= {};
+        }
+        state.topList= content;
+    },
+
+    [types.SETSEARCHLIST](state,content){
+        if(state.searchList.length !==0){
+            state.searchList= {};
+        }
+        state.searchList= content;
+    }
 
 };
 
@@ -146,7 +184,7 @@ const actions= {
         commit(types.SETCURRENTMUSICDURATION,time);
     },
 
-    addCollectedMusic({commit,rootState},music){
+    addCollectedMusic({commit},music){
         commit(types.ADDCOLLECTEDMUSIC,music);
     },
 
@@ -154,6 +192,56 @@ const actions= {
         commit(types.DELETECOLLECTEDMUSIC,id);
     },
 
+    setHotSongSheet({commit,rootState}){
+        if(rootState.MusicModule.hotSongSheet[0] !== undefined){
+            return;
+        }
+
+        commit(types.SETNETSTATE,true);
+        MusicApi.getHotSongSheet()
+            .then(
+                res=> {
+                    commit(types.SETNETSTATE,false);
+                    commit(types.SETHOTSONGSHEET,res.data.playlists);
+                },
+                err=> {
+                    commit(types.SETNETSTATE,false);
+                }
+            );
+    },
+
+    setTopList({commit},id){
+        commit(types.SETNETSTATE,true);
+        MusicApi.getMusicList(id)
+            .then(
+                res=> {
+                    commit(types.SETNETSTATE,false);
+                    commit(types.SETTOPLIST,res.data.playlist.tracks);
+                },
+                err=> {
+                    commit(types.SETNETSTATE,false);
+                }
+            );
+    },
+
+    setPlayingKind({commit},kind){
+        commit(types.SETPLAYINGKIND,kind);
+    },
+
+    setSearchList({commit},id){
+        commit(types.SETNETSTATE,true);
+        
+        MusicApi.getMusicList(id)
+            .then(
+                res=> {
+                    commit(types.SETNETSTATE,false);
+                    commit(types.SETTOPLIST,res.data.playlist.tracks);
+                },
+                err=> {
+                    commit(types.SETNETSTATE,false);
+                }
+            );
+    },
 };
 
 export default {

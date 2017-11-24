@@ -9,6 +9,8 @@ const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings'
 const PlayList= r=> require.ensure([],()=> r(require('@/views/music/playList/PlayList')) ,'playlist');
 const CollectionList= r=> require.ensure([],()=> r(require('@/views/music/collectionList/CollectionList')) ,'collectionlist');
 const TopList= r=> require.ensure([],()=> r(require('@/views/music/topList/TopList')) ,'toplist');
+const TopSheet= r=> require.ensure([],()=> r(require('@/views/music/topList/TopSheet')) ,'topsheet');
+
 const SearchView= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchView')) ,'searchView');
 
 
@@ -55,9 +57,18 @@ export default new Router({
                     components: {
                         ListInfo: TopList,
                     }
+                },{
+                    path: '/music/topsheet',
+                    name:'topsheet',
+                    components: {
+                        ListInfo: TopSheet,
+                    }
                 }
             ],
         },
+
+
+
         {
             path: '/settings',
             component: Settings,
