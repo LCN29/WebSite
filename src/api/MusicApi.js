@@ -38,9 +38,18 @@ export default {
            inAjax: 1,
            do: "albums",
        });
+    },
 
-
+    searchMusic(pageNum, word){
+        return fetch.get(baseUrl,{
+            inAjax: 1,
+            do: "search",
+            count: 10,
+            pages: pageNum,
+            name: word,
+        });
     }
+
 }
 
 ;

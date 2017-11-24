@@ -1,16 +1,225 @@
 <template>
     <div class="search-view">
-        <h1>搜索界面</h1>
+
+        <transition name="fade">
+            <div class="bg_search" v-show="showSearch" @click.stop="back"></div>
+        </transition>
+
+        <transition name="silde-top">
+            <div class="search_content" v-show="showSearch">
+                <input class="search_input"  ref="searchVal" type="text" @keyup.enter="searchMusic" @keyup.esc="back" placeholder="搜索内容">
+                <div class="search-btn" @click.stop="searchMusic">搜索</div>
+            </div>
+        </transition>
+
+        <transition name="silde-bottom">
+            <div class="search_select" v-show="showSearch">
+                <div class="select_type">
+                    <p class="select_title">热门歌曲</p>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">爱的故事(上)</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Fly Away</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Autumn (Original Mix) </span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Far Away</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">七里香</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">China-X</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">我以为我可以</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">再见了单纯</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Endless</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Think Again</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">PneumaticTokyo</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">采茶纪</span>
+                </div>
+                <div class="select_type">
+                    <p class="select_title">热门歌手</p>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">周杰伦</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">徐梦圆</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Alan Walker</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">张国荣</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Kozoro</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Taylor Swift</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">郑国锋</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">双笙</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">Owl City</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">陈奕迅</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">许嵩</span>
+                    <span class="select_span" @click.stop="clickSearchMusic($event)">王若琳</span>
+                </div>
+            </div>
+        </transition>
+
     </div>
 </template>
 
 <script>
+
     export default {
         name: 'search-view',
+        data () {
+            return {
+                showSearch: false
+            }
+        },
+        methods: {
+            searchMusic(){
+                const val = this.$refs.searchVal.value;
+                if (val === '') {
+                    alert('请输入你想搜的歌曲或歌手信息')
+                }else {
+                    this.$router.push({name: 'searchsheet', params: { w: val }});
+                }
+            },
+            back(){
+                this.$router.go(-1);
+            },
+            clickSearchMusic (e) {
+                // 点击了了某一项
+                this.$router.push({name: 'searchsheet', params: { w: e.target.innerHTML }})
+            }
+        },
+        mounted (){
+            this.showSearch = true;
+                this.$nextTick(() => {
+                this.$refs.searchVal.focus();
+            });
+        }
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss" type="text/scss">
+    @import "../../../assets/styles/base";
+
+    .search-view{
+        position: fixed;
+        @include fill-father;
+        z-index: 11;
+        padding: 20px;
+        .bg_search{
+            background: rgba(0,0,0,0.8);
+            position: absolute;
+            @include fill-father;
+            opacity: 1;
+            &.fade-enter-to,&.fade-leave-to{
+                transition: all 0.3s;
+            }
+            &.fade-enter,&.fade-leave-to{
+                opacity: 0;
+            }
+        }
+        .search_content{
+            width: 500px;
+            max-width: 100%;
+            margin: 30px auto 0;
+            position: relative;
+            &.silde-top-enter-to,&.silde-top-leave-to{
+                transition: all 0.3s;
+            }
+            &.silde-top-enter,&.silde-top-leave-to{
+                opacity: 0;
+                transform: translate3d(0,-50px,0);
+            }
+            .search_input{
+                display: block;
+                width: 100%;
+                height: 40px;
+                text-indent: 4px;
+                font-size: 14px;
+                background: transparent;
+                color: $text_Light_color;
+                border:1px solid $text_Light_color;
+                outline: none;
+            }
+            .search-btn{
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 60px;
+                height: 40px;
+                line-height: 40px;
+                color: #fff;
+                border-left: 1px solid $text_Light_color;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+        .search_select{
+            width: 500px;
+            max-width: 100%;
+            margin: 50px auto 0;
+            position: relative;
+            font-size: 0;
+            height: calc(100% - 140px);
+            overflow: auto;
+            &.silde-bottom-enter-to,&.silde-bottom-leave-to{
+                transition: all 0.8s 0.2s;
+            }
+            &.silde-bottom-enter,&.silde-bottom-leave-to{
+                opacity: 0;
+                transform: translate3d(0,50px,0);
+            }
+            .select_type{
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+                .select_title{
+                    width: 100%;
+                    height: 50px;
+                    line-height:50px;
+                    margin: 0 0 10px 0;
+                    font-size: 18px;
+                    color: $text_color;
+                    text-indent: 5px;
+                    border-bottom: 1px solid $border_bottom_color;
+                }
+                .select_span{
+                    display: inline-block;
+                    width: auto;
+                    padding: 2px 10px;
+                    height: 20px;
+                    line-height: 20px;
+                    border-radius: 2px;
+                    cursor: pointer;
+                    margin: 15px 8px;
+                    font-size: 14px;
+                    color: $text_Light_color;
+                    border: 1px solid $text_Light_color;
+                    &:hover{
+                        color: $text_color;
+                        border: 1px solid $text_color;
+                    }
+
+                }
+
+            }
+
+
+
+        }
+
+        //重置滚动条
+        /* 滚动条部分 */
+        ::-webkit-scrollbar {
+            width:4px;
+        }
+
+        /* 轨道 */
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+            -webkit-border-radius: 2px;
+            border-radius: 2px;
+        }
+
+        /* 手柄 */
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 2px;
+            border-radius: 2px;
+            background:rgba(200,200,200,0.9);
+            -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+        }
+        /* 手柄激活态 */
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(200,200,200,0.4);
+        }
+    }
 
 </style>

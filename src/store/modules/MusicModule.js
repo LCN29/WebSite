@@ -45,7 +45,7 @@ const state= {
     topList: {},
 
     //搜索出来的列表
-    searchList: {},
+    searchList: [],
 
 };
 
@@ -132,11 +132,14 @@ const mutations= {
         state.topList= content;
     },
 
+    [types.RESETSEARCHLIST](state){
+        state.searchList= [];
+    },
+
     [types.SETSEARCHLIST](state,content){
-        if(state.searchList.length !==0){
-            state.searchList= {};
-        }
-        state.searchList= content;
+        content.forEach((value,index)=>{
+            state.searchList.push(value);
+        });
     }
 
 };
@@ -228,14 +231,20 @@ const actions= {
         commit(types.SETPLAYINGKIND,kind);
     },
 
-    setSearchList({commit},id){
+    resetSearchList({commit}){
+        commit(types.RESETSEARCHLIST);
+    },
+
+    setSearchList({commit},word,pageNum){
         commit(types.SETNETSTATE,true);
-        
-        MusicApi.getMusicList(id)
+        MusicApi.searchMusic(pageNum,word)
             .then(
                 res=> {
                     commit(types.SETNETSTATE,false);
-                    commit(types.SETTOPLIST,res.data.playlist.tracks);
+                    if(res.data.code === -1){
+                        return;
+                    }
+                    commit(types.SETSEARCHLIST,res.data.result.songs);
                 },
                 err=> {
                     commit(types.SETNETSTATE,false);

@@ -13,7 +13,7 @@
                         <router-link tag="span" to="/music/playlist" class="todo_btn playing_btn">推荐列表</router-link>
                         <router-link tag="span" to="/music/collectionlist" class="todo_btn playing_btn">我的收藏</router-link>
                         <router-link tag="span" to="/music/toplist" class="todo_btn playing_btn">排行榜/歌单</router-link>
-                        <router-link tag="span" to="/music/playlist3" class="todo_btn playing_btn">搜索音乐</router-link>
+                        <router-link tag="span" to="/music/searchview" class="todo_btn playing_btn">搜索音乐</router-link>
                     </div>
 
                     <transition name="silde-top">
@@ -22,7 +22,7 @@
                 </div>
                 <!--全屏显示-->
                 <transition name="silde-top">
-                    <router-view class="music_wrapper" name="fullscreen"></router-view>
+                    <router-view class="music_wrapper" name="FullScreen"></router-view>
                 </transition>
 
                 <div class="right_info">

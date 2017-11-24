@@ -1,5 +1,5 @@
 <template>
-    <div class="play-list">
+    <div class="search-sheet">
         <div class="music_list_title">
             <span class="music_index"></span>
             <span class="music_name">歌曲</span>
@@ -7,9 +7,9 @@
             <span class="music_album">专辑</span>
             <span class="music_duration">时长</span>
         </div>
-        <div class="music_list_content">
-            <div class="music_list" v-if="getMusicList"
-                 v-for="(item, index) in getMusicList"
+        <div class="music_list_content" @scroll="searchMoreMusic">
+            <div class="music_list" v-if="getSearchList"
+                 v-for="(item, index) in getSearchList"
                  :key="item.id" :data-musicid="item.id" :data-pic="item.al.picUrl"
                  @click="clickPlayItem(item,index)"
             >
@@ -30,7 +30,7 @@
 				</span>
 
                 <span class="music_album">
-					<span @click.stop="getAlbum(item.al.id)">{{item.al.name}}</span>
+					<span @click.stop="getAlbum(item.albumId)">{{item.al.name}}</span>
 				</span>
 
                 <span class="music_duration">{{getMusicFormat(item.dt)}}</span>
@@ -42,46 +42,26 @@
 
 <script>
 
-    import { mapGetters,mapActions } from 'vuex';
+    // 该页面用于点击toplist后，音乐列表的显示
     import api from '../musicOperationApi';
+    import { mapActions,mapGetters } from 'vuex'
 
     export default {
-        name: 'play-list',
-        data () {
+        name: 'search-sheet',
+        data(){
             return{
-                id: this.$route.params.id || 124995419,
-                kind: 'music',
+                word: this.$route.params.w,
+                kind: "search",
+                searchMusicIndex: 1,
             }
         },
         methods: {
             ...mapActions([
-                'setMusicList',
+                'setSearchList',
                 'addCollectedMusic',
                 'setPlayingKind',
+                'resetSearchList',
             ]),
-            collectMusic(index){
-                //加入收藏夹
-                const item= this.getMusicList[index];
-                let music={
-                    id: item.id,
-                    name: item.name,
-                    picurl: item.al.picUrl,
-                    singer: item.ar[0].name,
-                    album: item.al.name,
-                    albumId: item.al.id,
-                    duration: this.getMusicFormat(item.dt),
-                };
-
-                this.addCollectedMusic(music);
-            },
-            searchMusic(index){
-                //查询音乐
-                console.log(index+"查询音乐");
-            },
-            getAlbum(id){
-                //获取专辑
-                console.log(id+"获取专辑");
-            },
             getMusicFormat(time){
                 return api.getMusicFormat(time);
             },
@@ -92,22 +72,58 @@
                     name: item.name,
                     picurl: item.al.picUrl,
                     singer: item.ar[0].name,
+                    duration: item.duration,
+                };
+                api.clickIndex(data,this);
+            },
+            collectMusic(index){
+                //加入收藏夹
+                const item= this.getSearchList[index];
+                let music={
+                    id: item.id,
+                    name: item.name,
+                    picurl: item.al.picUrl,
+                    singer: item.ar[0].name,
+                    album: item.al.name,
+                    albumId: item.al.id,
                     musicindex: index,
                     duration: this.getMusicFormat(item.dt),
                 };
-                api.clickIndex(data,this);
-            }
+
+                this.addCollectedMusic(music);
+            },
+            searchMoreMusic(e){
+                //查询更多信息
+                const mContent = e.target;
+                // 滚动的高加可视化的高 的 和   应该等于 元素的scrollHeight  才加载数据
+                const mContentSH = mContent.scrollTop + mContent.offsetHeight;
+                if (mContent.scrollHeight === mContentSH) {
+                    this.searchMusicIndex ++;
+                    this.setSearchList(this.word,this.searchMusicIndex);
+                } else {
+                    return
+                }
+            },
+            searchMusic(index){
+                //查询音乐
+                console.log(index+"查询音乐");
+            },
+            getAlbum(id){
+                //获取专辑
+                console.log(id+"获取专辑");
+            },
         },
         computed: {
             ...mapGetters([
-                'getMusicList',
+                'getSearchList',
                 'getCurrentMusic',
             ]),
         },
         mounted(){
             this.$nextTick(() => {
-                this.setPlayingKind(this.kind);
-                this.setMusicList(this.id);
+                  this.setPlayingKind(this.kind);
+                  this.resetSearchList();
+                  this.setSearchList(this.word,this.searchMusicIndex);
             });
         }
     }
@@ -118,7 +134,7 @@
 
     @import "../../../assets/styles/base";
 
-    .play-list{
+    .search-sheet{
         padding-left: 20px;
         padding-top: 10px;
         flex-direction: column;
@@ -184,7 +200,6 @@
             }
         }
 
-        //重置滚动条
         /* 滚动条部分 */
         ::-webkit-scrollbar {
             width:10px;

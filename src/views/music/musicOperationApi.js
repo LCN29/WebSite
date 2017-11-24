@@ -97,7 +97,8 @@ const musicApi = {
                         this.playNextPrev(that, true);
                         return;
                     }
-                    const duration = musiclist[index].dt.indexOf(":") > 0 ? musiclist[index].dt : musicApi.getMusicFormat(musiclist[index].dt);
+                    console.log(musiclist[index].dt);
+                    const duration = isNaN(musiclist[index].dt) ? musiclist[index].duration : musicApi.getMusicFormat(musiclist[index].dt);
                     const newData = {
                         id: musiclist[index].id,
                         name: musiclist[index].name,

@@ -12,7 +12,7 @@ const TopList= r=> require.ensure([],()=> r(require('@/views/music/topList/TopLi
 const TopSheet= r=> require.ensure([],()=> r(require('@/views/music/topList/TopSheet')) ,'topsheet');
 
 const SearchView= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchView')) ,'searchView');
-
+const SearchSheet= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchSheet')) ,'searchsheet');
 
 Vue.use(Router);
 
@@ -57,11 +57,25 @@ export default new Router({
                     components: {
                         ListInfo: TopList,
                     }
-                },{
+                },
+                {
                     path: '/music/topsheet',
                     name:'topsheet',
                     components: {
                         ListInfo: TopSheet,
+                    }
+                },
+                {
+                    path: '/music/searchview',
+                    components: {
+                        FullScreen: SearchView,
+                    }
+                },
+                {
+                    path: '/music/searchsheet',
+                    name: 'searchsheet',
+                    components: {
+                        ListInfo: SearchSheet,
                     }
                 }
             ],

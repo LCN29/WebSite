@@ -47,5 +47,8 @@ export const SETPLAYINGKIND= "SETPLAYINGKIND";
 //16,设置搜索出来的歌曲列表
 export const SETSEARCHLIST= "SETSEARCHLIST";
 
+//17重置搜索列表的内容
+export const RESETSEARCHLIST= "RESETSEARCHLIST";
+
 
 
