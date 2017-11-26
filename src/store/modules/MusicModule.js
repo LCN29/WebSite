@@ -8,14 +8,17 @@ const state= {
     currentMusic: {
         id: '',
         name: 'Each and All ',
-        url: '/static/default.mp3',
+        url: './static/default.mp3',
         duration: '05:17',
         singer: 'livetune/Fukase',
-        picurl: '/static/default.jpg',
+        picurl: './static/default.jpg',
         lyric: "",
         /* 在页面列表中的位置 */
         musicindex: -1,
     },
+
+    //显示歌词的标签
+    lrcElem: '',
 
     //当前歌曲的歌词位置
     musicPosition: 0,
@@ -51,6 +54,7 @@ const state= {
 
 const getters= {
 
+    getLrcElem: state=> state.lrcElem,
     getCurrentMusic: state=> state.currentMusic,
     getMusicPosition: state=> state.musicPosition,
     getCurrentMusicTime: state=> state.currentMusicTime,
@@ -66,6 +70,9 @@ const getters= {
 
 const mutations= {
 
+    [types.SETLRCELEM](state,elem){
+        state.lrcElem= elem;
+    },
     [types.SETCURRENTMUSIC](state,music){
         state.currentMusic= music;
     },
@@ -145,6 +152,10 @@ const mutations= {
 };
 
 const actions= {
+
+    setLrcElem({ commit }, elem){
+        commit(types.SETLRCELEM, elem);
+    },
 
     setCurrentMusic({commit},music){
         commit(types.SETCURRENTMUSIC,music);

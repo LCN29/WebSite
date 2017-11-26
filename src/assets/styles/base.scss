@@ -54,7 +54,10 @@ $progress_color: rgba(255,255,255,0.1);
 $buffering_color: rgba(255,255,255,0.2);
 $real_color: red;
 
-
+//滚动条消失
+::-webkit-scrollbar{
+  display:none;
+}
 
 // mixin
 

@@ -31,11 +31,12 @@
         methods: {
             ...mapActions([
                 'setAudioEle',
+                'setPlace',
             ]),
         },
         mounted(){
             this.setAudioEle(this.$refs.myAudio);
-            this.$refs.myAudio.play();
+        //    this.$refs.myAudio.play();
         }
     }
 </script>

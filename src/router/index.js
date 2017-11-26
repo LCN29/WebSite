@@ -5,14 +5,20 @@ import store from '../store';
 import Home from '@/views/home/Home';
 
 const Music= r=> require.ensure([],()=> r(require('@/views/music/Music')) ,'music');
-const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings')) ,'settings');
 const PlayList= r=> require.ensure([],()=> r(require('@/views/music/playList/PlayList')) ,'playlist');
 const CollectionList= r=> require.ensure([],()=> r(require('@/views/music/collectionList/CollectionList')) ,'collectionlist');
 const TopList= r=> require.ensure([],()=> r(require('@/views/music/topList/TopList')) ,'toplist');
 const TopSheet= r=> require.ensure([],()=> r(require('@/views/music/topList/TopSheet')) ,'topsheet');
-
-const SearchView= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchView')) ,'searchView');
+const SearchView= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchView')) ,'searchview');
 const SearchSheet= r=> require.ensure([],()=> r(require('@/views/music/searchView/SearchSheet')) ,'searchsheet');
+
+const Game= r=> require.ensure([],()=> r(require('@/views/game/Game')) ,'game');
+const GameMode= r=> require.ensure([],()=> r(require('@/views/game/gameMode/GameMode')) ,'gamemode');
+const DoubleGame= r=> require.ensure([],()=> r(require('@/views/game/doubleGame/DoubleGame')) ,'doublegame');
+const GameGrade= r=> require.ensure([],()=> r(require('@/views/game/gameGrade/GameGrade')) ,'gamegrade');
+
+const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings')) ,'settings');
+
 
 Vue.use(Router);
 
@@ -79,6 +85,36 @@ export default new Router({
                     }
                 }
             ],
+        },
+        {
+            path: '/game',
+            component: Game,
+            children: [
+                {
+                    path: '/',
+                    redirect: '/game/gamemode',
+                },
+                {
+                    path: '/game/gamemode',
+                    components:{
+                        GameView: GameMode
+                    }
+                },
+                {
+                    path: '/game/doublegame',
+                    name: 'doublegame',
+                    components:{
+                        GameView: DoubleGame
+                    }
+                },
+                {
+                    path: '/game/gamegrade',
+                    name: 'gamegrade',
+                    components:{
+                        GameView: GameGrade
+                    }
+                }
+            ]
         },
 
 

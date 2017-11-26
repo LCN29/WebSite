@@ -1,4 +1,6 @@
 
+/*--------------------------------------全局的--------------------------------------------*/
+
 // 1,设置音乐路由
 export const SETMUSICROUTER= "SETMUSICROUTER";
 
@@ -7,6 +9,11 @@ export const SETNETSTATE= "SETNETSTATE";
 
 //3，设置音乐播放标签<audio>
 export const SETAUDIOELE= "SETAUDIOELE";
+
+
+
+
+/*--------------------------------------Music--------------------------------------------*/
 
 // 4, 设置当前的播放歌曲
 export const SETCURRENTMUSIC= "SETCURRENTMUSIC";
@@ -50,5 +57,14 @@ export const SETSEARCHLIST= "SETSEARCHLIST";
 //17重置搜索列表的内容
 export const RESETSEARCHLIST= "RESETSEARCHLIST";
 
+
+
+/*--------------------------------------Game--------------------------------------------*/
+
+//设置双人模式是的房间名
+export const SETROOMNAME= "SETROOMNAME";
+
+//设置游戏界面上的标题提示
+export const SETTITLEHINT= "SETTITLEHINT";
 
 

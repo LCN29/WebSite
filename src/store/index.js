@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import MusicModule from './modules/MusicModule';
-
 import * as types from './mutation-types';
+
+import MusicModule from './modules/MusicModule';
+import GameModule from './modules/GameModule';
+
+
 
 Vue.use(Vuex);
 
@@ -17,17 +20,13 @@ const state = {
     showLoading: false,
     //音乐播放标签<audio>
     audioEle: '',
-
-    //显示歌词的标签
-    lrcElem: '',
-
 };
 
 const getters = {
     getMusicRouter: state=> state.musicRouter,
     getShowLoading: state=> state.showLoading,
     getAudioEle: state=> state.audioEle,
-    getLrcElem: state=> state.lrcElem,
+
 };
 
 const mutations= {
@@ -43,10 +42,6 @@ const mutations= {
     [types.SETAUDIOELE](state,audio){
         state.audioEle= audio;
     },
-    //4,设置歌词播放的控件
-    [types.SETLRCELEM](state,elem){
-        state.lrcElem= elem;
-    }
 };
 
 const actions= {
@@ -59,9 +54,6 @@ const actions= {
     setAudioEle({commit},audio){
         commit(types.SETAUDIOELE,audio);
     },
-    setLrcElem({ commit }, elem){
-        commit(types.SETLRCELEM, elem);
-    }
 };
 
 
@@ -72,6 +64,7 @@ const store = new Vuex.Store({
     actions,
     modules: {
         MusicModule,
+        GameModule,
     },
     strict: debug,
 });
