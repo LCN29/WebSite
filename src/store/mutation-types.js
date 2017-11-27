@@ -61,10 +61,5 @@ export const RESETSEARCHLIST= "RESETSEARCHLIST";
 
 /*--------------------------------------Game--------------------------------------------*/
 
-//设置双人模式是的房间名
-export const SETROOMNAME= "SETROOMNAME";
-
-//设置游戏界面上的标题提示
-export const SETTITLEHINT= "SETTITLEHINT";
 
 

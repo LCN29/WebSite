@@ -11,7 +11,7 @@
         </div>
 
         <div class='num'>
-            <p>得分  <span id='fenshu' >{{score}}</span></p>
+            <p>得分  <span>{{score}}</span></p>
         </div>
     </div>
 </template>
@@ -37,7 +37,6 @@
             ]),
         },
         mounted(){
-            this.setTitleHint("双人游戏进行中...");
             api.initGame(this,this.name,this.type);
         }
     }
@@ -46,10 +45,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" type="text/scss">
     .double-game{
-        background: yellowgreen;
         height: 100%;
         h3{
-            background: rebeccapurple;
             text-align: center;
         }
         .eraser-zero{
@@ -76,11 +73,15 @@
         }
 
         .num{
+            text-align: center;
             p{
                 text-align: center;
                 height: 30px;
                 line-height: 30px;
                 margin-bottom: 10px;
+                display: inline-block;
+                background: white;
+                padding: 0 20px;
             }
             span {
                 color : red

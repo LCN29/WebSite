@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 import * as types from './mutation-types';
 
 import MusicModule from './modules/MusicModule';
-import GameModule from './modules/GameModule';
 
 
 
@@ -64,7 +63,6 @@ const store = new Vuex.Store({
     actions,
     modules: {
         MusicModule,
-        GameModule,
     },
     strict: debug,
 });

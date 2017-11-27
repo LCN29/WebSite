@@ -1,38 +1,69 @@
 <template>
     <div class="game-mode">
         <div class="singer-mode">
-            <span>单人模式</span>
-            <div>简单模式<br/>最多有10*10个块</div>
-            <div>困难模式<br/>最多有15*15个块</div>
-            <div>地狱模式<br/>最多有20*20个块</div>
+            <h3>单人模式</h3>
+            <router-link tag="p" to="/game/singlegame/10">简单模式</router-link>
+            <router-link tag="p" to="/game/singlegame/15">困难模式</router-link>
+            <router-link tag="p" to="/game/singlegame/20">地狱模式</router-link>
         </div>
 
         <div class="double-mode">
-            <span>双人模式</span>
-            <div @click.stop="createRoom">创建房间</div>
-            <div @click.stop="joinRoom">加入房间</div>
+            <h3>双人模式</h3>
+            <p @click.stop="createRoom">创建房间</p>
+            <p @click.stop="joinRoom">加入房间</p>
+            <prompt-dialog :title="title" hint="请输入房间号" @confirm="confirm" @cancel="cancel" :showPrompt="showPrompt"></prompt-dialog>
         </div>
     </div>
 </template>
 
 <script>
 
-    import api from '../gameOperationApi';
+    import api from './gameModeOperationApi';
+    import PromptDialog from '../../../components/PromptDialog.vue';
 
     export default {
         name: 'game-game',
+        data(){
+            return{
+                title: "创建房间",
+                showPrompt: false,
+                createARoom: false,
+            }
+        },
+        components: {
+            PromptDialog,
+        },
         methods: {
+            confirm(roomName){
+                this.showPrompt= false;
+                if(roomName ===""){
+                    alert("房间名不可为空");
+                    return;
+                }
+
+                if(this.createARoom){
+                    api.createRoom(roomName,this);
+                }else{
+                    api.joinRoom(roomName,this);
+                }
+
+            },
+            cancel(){
+                this.showPrompt= false;
+            },
             createRoom(){
-                let s =prompt("创建房间","room");
-                api.createRoom(s,this);
+                this.title= "创建房间";
+                this.showPrompt= true;
+                this.createARoom= true;
             },
             joinRoom(){
-                let s =prompt("加入房间","room");
-                api.joinRoom(s,this);
+                this.title= "加入房间";
+                this.showPrompt= true;
+                this.createARoom= false;
             },
             noRoom(){
                 alert('该房间不存在');
-            }
+            },
         },
         mounted(){
             api.init();
@@ -43,23 +74,47 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" type="text/scss">
 
+    @import "../../../assets/styles/base";
+
     .game-mode{
-        background: yellowgreen;
         height: 100%;
         display: flex;
         padding-bottom: 50px;
+        justify-content: center;
+        align-items: center;
         .singer-mode,.double-mode{
-            flex: 1;
-            flex-direction: column;
-            margin:10px;
-            background: green;
-            align-items: center;
-            justify-content: center;
             display: flex;
-            font-size: 40px;
-            div{
+            flex-direction: column;
+            width: 282px;
+            height: 500px;
+            font-size: 10px;
+            margin: 0px 100px;
+            h3{
+                color: $text_color_active;
                 text-align: center;
+                margin-top: 30px;
+                font-size: 20px;
+                margin-bottom: 20px;
             }
+            p{
+                font-size: 16px;
+                color: $text_color_active;
+                text-align: center;
+                border-radius: 5px;
+                border: 2px solid white;
+                width: 150px;
+                padding: 10px 0px;
+                margin: 10px auto;
+            }
+        }
+        .singer-mode{
+            background: url("../../../assets/imgs/single_bg.jpg") no-repeat center center;
+            background-size: 100% 100%;
+        }
+        .double-mode{
+            background: url("../../../assets/imgs/double_bg.jpg") no-repeat center center;
+            background-size: 100% 100%;
+            position: relative;
         }
     }
 </style>

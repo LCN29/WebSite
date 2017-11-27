@@ -16,6 +16,7 @@ const Game= r=> require.ensure([],()=> r(require('@/views/game/Game')) ,'game');
 const GameMode= r=> require.ensure([],()=> r(require('@/views/game/gameMode/GameMode')) ,'gamemode');
 const DoubleGame= r=> require.ensure([],()=> r(require('@/views/game/doubleGame/DoubleGame')) ,'doublegame');
 const GameGrade= r=> require.ensure([],()=> r(require('@/views/game/gameGrade/GameGrade')) ,'gamegrade');
+const SingleGame= r=> require.ensure([],()=> r(require('@/views/game/singleGame/SingleGame')) ,'singlegame');
 
 const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings')) ,'settings');
 
@@ -30,6 +31,7 @@ export default new Router({
         },
         {
             path: '/home',
+            name: 'home',
             component: Home,
         },
         {
@@ -112,6 +114,13 @@ export default new Router({
                     name: 'gamegrade',
                     components:{
                         GameView: GameGrade
+                    }
+                },
+                {
+                    path: '/game/singlegame/:num',
+                    name: 'singlegame',
+                    components: {
+                        GameView: SingleGame
                     }
                 }
             ]

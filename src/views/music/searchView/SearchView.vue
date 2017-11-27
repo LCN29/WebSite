@@ -73,7 +73,7 @@
             },
             clickSearchMusic (e) {
                 // 点击了了某一项
-                this.$router.push({name: 'searchsheet', params: { w: e.target.innerHTML }})
+                this.$router.push({name: 'searchsheet', params: { w: e.target.innerHTML }});
             }
         },
         mounted (){

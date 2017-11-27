@@ -31,6 +31,7 @@ const gameApi= {
                     that.game.create(arr);
                 } else {
                 //    that.game.removeAndClear();
+                    obj= null;
                     that.game = null;
                     _this.$router.push({name: 'gamegrade', params: {type: type,room: roomName,mode:'double'}});
                 }
@@ -96,7 +97,6 @@ const gameApi= {
                 });
             }
 
-            console.log(num+"///"+obj.questionNum);
             if( num === (obj.questionNum+1)){
                 obj.dataRef.update({
                     finish : 1,

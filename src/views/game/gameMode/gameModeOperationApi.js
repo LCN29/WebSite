@@ -92,6 +92,7 @@ const gameApi= {
                 if(that.one){
                     that.one= false;
                     _this.$router.push({name: 'doublegame', params: {type: "two",room: name}});
+                  //  that.clear();
                 }
 
             }
