@@ -7,6 +7,8 @@ import App from './App';
 import router from './router';
 import store from './store';
 
+require('swiper/dist/css/swiper.css');
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

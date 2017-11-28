@@ -228,7 +228,7 @@
             }
             @keyframes mymove
             {
-                0% 	{ transform: rotate(0deg); opacity: 1.0}
+                0% 	    { transform: rotate(0deg); opacity: 1.0}
                 50% 	{ transform: rotate(20deg); opacity: 0.8}
                 100% 	{ transform: rotate(-20deg); opacity: 1.0}
             }

@@ -1,18 +1,24 @@
 <template>
     <div class="game-mode">
-        <div class="singer-mode">
-            <h3>单人模式</h3>
-            <router-link tag="p" to="/game/singlegame/10">简单模式</router-link>
-            <router-link tag="p" to="/game/singlegame/15">困难模式</router-link>
-            <router-link tag="p" to="/game/singlegame/20">地狱模式</router-link>
+        <div class="mode">
+            <div class="singer-mode">
+                <h3>单人模式</h3>
+                <router-link tag="p" to="/game/singlegame/10">简单模式</router-link>
+                <router-link tag="p" to="/game/singlegame/15">困难模式</router-link>
+                <router-link tag="p" to="/game/singlegame/20">地狱模式</router-link>
+            </div>
+
+            <div class="double-mode">
+                <h3>双人模式</h3>
+                <p @click.stop="createRoom">创建房间</p>
+                <p @click.stop="joinRoom">加入房间</p>
+                <prompt-dialog :title="title" hint="请输入房间号" @confirm="confirm" @cancel="cancel" :showPrompt="showPrompt"></prompt-dialog>
+            </div>
+        </div>
+        <div class="download">
+            <a href="./static/seekColor.apk">手机版</a>
         </div>
 
-        <div class="double-mode">
-            <h3>双人模式</h3>
-            <p @click.stop="createRoom">创建房间</p>
-            <p @click.stop="joinRoom">加入房间</p>
-            <prompt-dialog :title="title" hint="请输入房间号" @confirm="confirm" @cancel="cancel" :showPrompt="showPrompt"></prompt-dialog>
-        </div>
     </div>
 </template>
 
@@ -77,44 +83,63 @@
     @import "../../../assets/styles/base";
 
     .game-mode{
-        height: 100%;
-        display: flex;
-        padding-bottom: 50px;
-        justify-content: center;
-        align-items: center;
-        .singer-mode,.double-mode{
+        .mode{
+            height: auto;
             display: flex;
-            flex-direction: column;
-            width: 282px;
-            height: 500px;
-            font-size: 10px;
-            margin: 0px 100px;
-            h3{
-                color: $text_color_active;
-                text-align: center;
-                margin-top: 30px;
-                font-size: 20px;
-                margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+            .singer-mode,.double-mode{
+                display: flex;
+                flex-direction: column;
+                width: 282px;
+                height: 500px;
+                font-size: 10px;
+                margin: 0px 100px;
+                h3{
+                    color: $text_color_active;
+                    text-align: center;
+                    margin-top: 30px;
+                    font-size: 20px;
+                    margin-bottom: 20px;
+                }
+                p{
+                    font-size: 16px;
+                    color: $text_color_active;
+                    text-align: center;
+                    border-radius: 5px;
+                    border: 2px solid white;
+                    width: 150px;
+                    padding: 10px 0px;
+                    margin: 10px auto;
+                }
             }
-            p{
-                font-size: 16px;
-                color: $text_color_active;
-                text-align: center;
-                border-radius: 5px;
-                border: 2px solid white;
-                width: 150px;
-                padding: 10px 0px;
-                margin: 10px auto;
+            .singer-mode{
+                background: url("../../../assets/imgs/single_bg.jpg") no-repeat center center;
+                background-size: 100% 100%;
+            }
+            .double-mode{
+                background: url("../../../assets/imgs/double_bg.jpg") no-repeat center center;
+                background-size: 100% 100%;
+                position: relative;
             }
         }
-        .singer-mode{
-            background: url("../../../assets/imgs/single_bg.jpg") no-repeat center center;
-            background-size: 100% 100%;
-        }
-        .double-mode{
-            background: url("../../../assets/imgs/double_bg.jpg") no-repeat center center;
-            background-size: 100% 100%;
-            position: relative;
+        .download{
+            height: 10%;
+            display: inline-block;
+            margin-top: 10px;
+            margin-left: 20%;
+            animation: downloadmove 10s linear  0.2s infinite;
+
+            a{
+                color: rgba(255,255,255,0.8);
+            }
+
+            @keyframes downloadmove
+            {
+                0% 	    { transform: scale(1)}
+                50% 	{ transform: scale(0.8)}
+                100% 	{ transform: scale(1)}
+            }
         }
     }
 </style>
