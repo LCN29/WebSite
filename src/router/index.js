@@ -128,7 +128,7 @@ export default new Router({
         },
 
         {
-            path: '/login/:type',
+            path: '/login',
             component: Login,
         },
 
