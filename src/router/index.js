@@ -18,6 +18,7 @@ const DoubleGame= r=> require.ensure([],()=> r(require('@/views/game/doubleGame/
 const GameGrade= r=> require.ensure([],()=> r(require('@/views/game/gameGrade/GameGrade')) ,'gamegrade');
 const SingleGame= r=> require.ensure([],()=> r(require('@/views/game/singleGame/SingleGame')) ,'singlegame');
 
+const Login= r=> require.ensure([],()=> r(require('@/views/login/login')) ,'login');
 const Settings= r=> require.ensure([],()=> r(require('@/views/settings/Settings')) ,'settings');
 
 
@@ -126,7 +127,10 @@ export default new Router({
             ]
         },
 
-
+        {
+            path: '/login/:type',
+            component: Login,
+        },
 
         {
             path: '/settings',

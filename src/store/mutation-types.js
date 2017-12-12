@@ -10,6 +10,12 @@ export const SETNETSTATE= "SETNETSTATE";
 //3，设置音乐播放标签<audio>
 export const SETAUDIOELE= "SETAUDIOELE";
 
+//4，设置登录状态
+export const SETLOGINSTATE= "SETLOGINSTATE";
+
+//5,登录者的信息
+export const SETLOGGEDMESSAGE= "SETLOGGEDMESSAGE";
+
 
 
 

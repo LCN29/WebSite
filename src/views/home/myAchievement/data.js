@@ -91,6 +91,19 @@ export default {
                 'http://pic.iask.cn/fimg/4931624130_516.jpg',
                 'http://pic.iask.cn/fimg/4931624130_516.jpg',
             ],
+        },
+        {
+            id: 8,
+            name: 'WebSite',
+            git: 'https://github.com/LCN29/WebSite',
+            technology: 'Vue+Vue全家桶，axios,jq,swiper,sass,阿里云服务器',
+            describe: '第一个用vue做出来的项目，就是本站了，现在已经实现了首页的个人信息展示，音乐页面的音乐播放，同时'+
+            '将自己H5的小游戏嵌入到游戏界面。',
+            imgs: [
+                'https://s1.ax1x.com/2017/11/28/hssNn.png',
+                'https://s1.ax1x.com/2017/11/28/hsrAs.png',
+                'https://s1.ax1x.com/2017/11/28/hsB7j.png',
+            ],
         }
     ]
 };

@@ -7,7 +7,7 @@
                 <router-link tag="li" to="/music">音乐</router-link>
                 <router-link tag="li" to="/game">游戏</router-link>
             </ul>
-            <ul class="right-menu clear"  @mouseover="showWeatherInfo" @mouseleave="hideWeatherInfo">
+            <ul class="right-menu clear">
 
                 <li @mouseover="showWeatherInfo" @mouseleave="hideWeatherInfo">
                     <span>
@@ -16,7 +16,16 @@
                     </span>
                 </li>
 
-                <router-link tag="li" to="/settings" class="settings" title="设置"></router-link>
+                <li v-if="!getLoginState">
+                    <router-link tag="span" to="/login">登录</router-link>
+                    <span>|</span>
+                    <router-link tag="span" to="/login">注册</router-link>
+                </li>
+                <li v-else>
+                    <span class="user">{{getLoggedMessage.user}}</span>
+                </li>
+
+               <!-- <router-link tag="li" to="/settings" class="settings" title="设置"></router-link>-->
             </ul>
         </div>
         <transition name="fade">
@@ -33,6 +42,8 @@
 
     import api from '../api/GlobalApi';
 
+    import { mapGetters } from 'vuex';
+
     let t;
     export default {
         name: 'my-content',
@@ -45,6 +56,12 @@
         },
         components: {
             Weather
+        },
+        computed: {
+            ...mapGetters([
+                'getLoginState',
+                'getLoggedMessage',
+            ]),
         },
         methods: {
             getPlace(){
@@ -128,6 +145,15 @@
                 li{
                     @include my-li-style;
                     position: relative;
+
+                    span:hover{
+                        text-decoration: underline;
+                    }
+                }
+                .user{
+                    font-size: 20px;
+                    font-weight: 400;
+                    text-shadow: 0px 1px black;
                 }
                 .settings{
                     background: url("../assets/svgs/settings.svg") no-repeat center center;

@@ -19,13 +19,20 @@ const state = {
     showLoading: false,
     //音乐播放标签<audio>
     audioEle: '',
+    // 是否需要登录
+    loginState: false,
+    //登录者信息
+    loggedMessage: {
+        user: 'LCN'
+    },
 };
 
 const getters = {
     getMusicRouter: state=> state.musicRouter,
     getShowLoading: state=> state.showLoading,
     getAudioEle: state=> state.audioEle,
-
+    getLoginState: state=> state.loginState,
+    getLoggedMessage: state=> state.loggedMessage,
 };
 
 const mutations= {
@@ -41,6 +48,14 @@ const mutations= {
     [types.SETAUDIOELE](state,audio){
         state.audioEle= audio;
     },
+    //4,设置登录状态
+    [types.SETLOGINSTATE](state,loginState){
+        state.loginState= loginState;
+    },
+    //5,设置登录信息
+    [types.SETLOGGEDMESSAGE](state,loggedMessage){
+        state.loggedMessage= loggedMessage;
+    }
 };
 
 const actions= {
@@ -53,6 +68,12 @@ const actions= {
     setAudioEle({commit},audio){
         commit(types.SETAUDIOELE,audio);
     },
+    setLoginState({ commit}, loginState){
+        commit(types.SETLRCELEM,loginState);
+    },
+    setLoggedMessage( { commit }, loggedMessage ){
+        commit(types.SETLOGGEDMESSAGE, loggedMessage);
+    }
 };
 
 
