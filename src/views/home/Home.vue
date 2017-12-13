@@ -84,7 +84,10 @@
             },
         },
         mounted(){
-
+            this.$nextTick(() => {
+                this.initAudioEvent();
+                this.keypressEvent();
+            });
         }
     }
 </script>

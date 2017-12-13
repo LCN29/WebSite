@@ -22,7 +22,7 @@
                     <router-link tag="span" to="/login">注册</router-link>
                 </li>
                 <li v-else>
-                    <span class="user">{{getLoggedMessage.user}}</span>
+                    <span class="user">{{getLoggedMessage.username}}</span>
                 </li>
 
                <!-- <router-link tag="li" to="/settings" class="settings" title="设置"></router-link>-->

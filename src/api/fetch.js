@@ -45,7 +45,7 @@ export default {
         return axios({
             method: 'get',
             url,
-            params,
+            params : params ? params : null,
             timeout: 10000
         }).then(
                 response =>{

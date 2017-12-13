@@ -1,6 +1,5 @@
 <template>
     <div class="login">
-        <vue-particles color="#36D1DC" shapeType="star" :particlesNumber="180" :particleSize="3" :clickEffect="false"></vue-particles>
         <section class="container">
             <div class="selectHint">
                 <div class="loginContainer">
@@ -25,15 +24,15 @@
                 <div class="imgBack">
                     <img :src="image" alt=""/>
                 </div>
-                <div class="form_login_body">
+                <div class="form_login_body" @keyup.13.stop="login">
                     <a href="#" @click="cancel"></a>
                     <h2>登录</h2>
-                    <input type="text" placeholder="用户名" />
-                    <input type="password" placeholder="密码" />
+                    <input type="text" placeholder="用户名" v-model="username"/>
+                    <input type="password" placeholder="密码" v-model="password"/>
                     <section>
-                        <input type="text" placeholder="验证码" maxlength="4" />
-                        <img />
-                        <div class="change_img">换一张</div>
+                        <input type="tel" name="telephone" placeholder="验证码" maxlength="4" v-model="verifycode"/>
+                        <img :src="codeImage"/>
+                        <div class="change_img" @click="getVerifyCode">换一张</div>
                     </section>
                     <p><span>忘记密码了</span></p>
                     <button class="btn_login" @click="login">登录</button>
@@ -49,29 +48,50 @@
                 </div>
             </div>
         </section>
+        <hint-dialog :title="title" :showHint="showHint" @confirm="determine" dialogStyle="width: 20%; left: 40%"></hint-dialog>
     </div>
 </template>
 
 <script>
 
-    import VueParticles from "../../../node_modules/vue-particles/src/vue-particles/vue-particles.vue";
+    import HintDialog from '../../components/HintDialog.vue';
+
+    import UserApi from '../../api/UserApi';
+
+    import { mapActions} from 'vuex';
+
     export default {
         name: 'login',
         data(){
             return{
-                image: 'http://img4.imgtn.bdimg.com/it/u=2563309609,3447899698&fm=214&gp=0.jpg',
-                loginState: false,
-                registState: false,
+                image: 'https://s1.ax1x.com/2017/12/12/bF1yT.jpg',
+                showHint: false, //是否显示对话框
+                title: '',  //对话框的标题
+                loginState: false,  //点击了登录吗
+                registState: false,     //点击了注册吗
+                codeImage: null, //验证码图片
+                codeNumber: null, //验证码答案
+                username: "", //用户名
+                password: "", //密码
+                verifycode: "", // 用户输入的验证码
+                rightverifycoed: "", //正确的验证码答案
             }
         },
         components: {
-            VueParticles
+            HintDialog,
         },
         methods: {
+            ...mapActions([
+                'setLoginState',
+                'setLoggedMessage'
+            ]),
+            determine(){
+                this.showHint= false;
+            },
             selectLogin(){
-                console.log(123);
                 this.registState= false;
                 this.loginState= true;
+                this.getVerifyCode();
             },
             selectRegist(){
                 this.loginState= false;
@@ -82,12 +102,68 @@
                 this.registState= false;
             },
             login(){
-
+                if(this.username===""){
+                    this.title= "用户名不能为空";
+                    this.showHint= true;
+                    this.getVerifyCode();
+                    return;
+                }else if(this.password===""){
+                    this.title= "密码不能为空";
+                    this.showHint= true;
+                    this.getVerifyCode();
+                    return;
+                }else if(this.verifycode===""){
+                    this.title= "验证码不能为空";
+                    this.showHint= true;
+                    this.getVerifyCode();
+                    return;
+                }else if( parseInt(this.rightverifycoed) !== parseInt(this.verifycode)){
+                    this.title= "验证码不正确";
+                    this.showHint= true;
+                    this.getVerifyCode();
+                    return;
+                }
+                UserApi.login(this.username, this.password)
+                        .then(res=> {
+                            console.log(res.data);
+                            const { status, message} = res.data;
+                            if(status === 1){
+                                console.log(1232);
+                            }
+                            if( status=== 0 ){
+                                this.title= message;
+                                this.showHint= true;
+                                this.getVerifyCode();
+                                return;
+                            }
+                            this.setLoginState(true);
+                            this.setLoggedMessage({
+                                username: res.data.username,
+                            });
+                            this.$router.push({name: 'home'});
+                        })
+                        .catch(err=> {
+                            this.title= "出现未知原因，请在试一次";
+                            this.showHint= true;
+                            this.getVerifyCode();
+                            return;
+                        });
             },
             regist(){
 
-            }
-        }
+            },
+            getVerifyCode(){
+                this.codeNumber= null;
+                UserApi.getVerifyCode()
+                        .then( res=> {
+                            this.codeImage= res.data.code;
+                            this.rightverifycoed = res.data.num;
+                        })
+                        .catch( err=> {
+                            console.log(err);
+                        });
+            },
+        },
     }
 </script>
 
@@ -198,7 +274,7 @@
                     display: block;
                     margin-left: 10px;
                     margin-top: 10px;
-                    background: white url("../../assets/imgs/left_arrow.png") center center;
+                    background: url("../../assets/imgs/left_arrow.png") center center;
                     background-size: 100%;
                 }
                 input {
@@ -248,6 +324,7 @@
                         input{
                             width:60px;
                             margin-left: 0px;
+                            -webkit-appearance: none;
                         }
                         div{
                             width: 60px;
@@ -261,9 +338,11 @@
                             }
                         }
                         img{
-                            width: 130px;
-                            height: 36px;
+                            width: 128px;
+                            height: 34px;
                             margin-left: 10px;
+                            background: rgba(255,255,255,0.6);
+                            border: 1px solid black;
                         }
                     }
                     p {

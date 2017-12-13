@@ -23,7 +23,7 @@ const state = {
     loginState: false,
     //登录者信息
     loggedMessage: {
-        user: 'LCN'
+        username: 'LCN'
     },
 };
 
@@ -69,7 +69,7 @@ const actions= {
         commit(types.SETAUDIOELE,audio);
     },
     setLoginState({ commit}, loginState){
-        commit(types.SETLRCELEM,loginState);
+        commit(types.SETLOGINSTATE,loginState);
     },
     setLoggedMessage( { commit }, loggedMessage ){
         commit(types.SETLOGGEDMESSAGE, loggedMessage);
